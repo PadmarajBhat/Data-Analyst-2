@@ -1,0 +1,1027 @@
+---
+output:
+  html_document: 
+    df_print: default
+    keep_md: yes
+    toc: yes
+  pdf_document: 
+    latex_engine: xelatex
+    number_sections: yes
+    toc: yes
+---
+EDA of Red Wine Data Set by Padmaraj
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+#Let us load libraries required for the plotting for our analysis.
+
+#ggplots are the only plots used in this report
+library(ggplot2)
+
+#subset function does not work with "and" logical operator. dplyr is intuitive 
+#to use in those scenarios.
+library(dplyr)
+
+#We need multi plot in a plot acts as a starting point. Helps like a dashboard 
+#report of all the variable.
+library(GGally)
+
+#to reshape variables to plot line graph
+library(reshape2)
+
+#Helps to create report in Html & Pdf formats
+library(knitr)
+library(markdown)
+
+#commands to generate reports
+
+#knit("wineQualityReds.Rmd")
+#markdownToHTML('wineQualityReds.md', 
+#  'wineQualityReds.html', options=c("use_xhml"))
+#markdownToHTML('wineQualityReds.knit.md', 'wineQualityReds.html')
+#system("pandoc -s wineQualityReds.md -o wineQualityReds.pdf")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,Load_the_Data}
+# Load the Data
+
+#getwd()
+setwd('C:/Users/padmaraj.bhat/Desktop/NoteBookExercises/Rexercise')
+
+rw_df_1 <- rw_df <- read.csv('wineQualityReds.csv')
+
+
+#Let us convert the feature of interest (quality) to factor. This would help in
+#our bivariate analysis.
+rw_df$quality <- factor(rw_df$quality)
+```
+
+#Abstract: 
+#### This tidy data set contains 1,599 red wines with 11 variables on the chemical properties of the wine. At least 3 wine experts rated the quality of each wine, providing a rating between 0 (very bad) and 10 (very excellent).
+
+# Univariate Plots Section
+## Plots for 'Alcohol' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Alcohol}
+#raw details of the variable
+summary(rw_df$alcohol)
+```
+```{r echo=FALSE, }
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Alcohol1}
+#initial plot
+ggplot(aes(alcohol), data=rw_df) + geom_histogram(binwidth = .1)
+```
+```{r echo=FALSE}
+
+```
+####In the Above plot, we could see that there are discontinuity in plots. These are present in both the ends of the graph. Note that here the bandwidth is set to ".1" while plotting which is based on the observation made on "Summary" (table above to the plot) output. The Table indicates that the variable values can have high variance in fractions, especially, 1/10th position.
+
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Alcohol_1}
+#cutting the long tails at either ends but to maintain the length enough to 
+#retain most of the relavant values.
+rw_df %>%
+  subset(alcohol < quantile(alcohol , .99)) %>%
+  subset(alcohol > quantile(alcohol , .01)) %>%
+  ggplot(aes(alcohol)) + geom_histogram(binwidth = .1) +
+  geom_vline(xintercept = quantile(rw_df$alcohol,0.25), color='red') +
+  geom_vline(xintercept = quantile(rw_df$alcohol,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+####Here we attempted to remove those outliers which were causing the discontinuity in the map. Data points below 1 percentile and above 99 percentile were removed. The limit of the percentile were chosen based on the iterative approach to retain maximum input samples but without outliers.
+
+#### Now, the above plot is not only continuous but also indicates the range of value for the alcohol variable more accurately. The plot indicates one more aspect ,density, for which it was plotted. We see that variable has lot of data points / samples in between 9 - 11 units. Let us zoom in to have the clear visualisation of density variation in the high/upper peak of the above chart.
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Alcohol_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(alcohol < quantile(alcohol , .75)) %>%
+  subset(alcohol > quantile(alcohol , .25)) %>%
+  ggplot(aes(alcohol)) + geom_histogram(binwidth = .1)
+
+```
+```{r echo=FALSE}
+
+```
+#### IQR = 75 percentile - 25 percentile i.e. Data samples lying in second and third quantile. In other words, IQR gives us the center portion (domb) of the normal distribution. Here we see that, though alcohol has range of 9 to 14; maximum data samples have alcohol units ranging between 9.5 to 11.5. Note that IQR values can also be noted in Summary output but the visualization of the same gives us the idea of the frequency of values under IQR.
+
+
+###Let us do the similar plotting for the rest of the variables for red wine data. 
+###1. First we will have the Summary data on the variable
+###2. We will then plot the histogram of variable without outlier extraction.
+###3. Followed by the same plot but with outlier removed.
+###4. Finally IQR plot to visualise the peak density range.
+## Plots for 'sulphates' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Sulphates}
+#to identify bin width size and IQR range
+summary(rw_df$sulphates)
+```
+```{r echo=FALSE}
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Sulphates__1}
+#initial plot
+ggplot(aes(sulphates), data=rw_df) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+#### Note that here we see that variable value varies at 1/100 th position.
+\pagebreak
+```{r echo=FALSE, fig.align='center', Univariate_Plots_Sulphates_1}
+#remove outliers
+sulphates_graph <- rw_df %>%
+  subset(sulphates < quantile(sulphates , .98)) %>%
+  subset(sulphates > quantile(sulphates , .01))
+
+  ggplot(aes(sulphates),data = sulphates_graph) +
+    geom_histogram(binwidth = .01) +
+    geom_vline(xintercept =
+                 quantile(sulphates_graph$sulphates,0.25), color='red') +
+    geom_vline(xintercept = 
+               quantile(sulphates_graph$sulphates,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### Note that we can cut the tail at suphates greater than 1.0. However, I am removing the samples only those which would cause discontinuity for the binwidth = 0.01.
+
+\  
+\  
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Sulphates_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(sulphates < quantile(sulphates , .75)) %>%
+  subset(sulphates > quantile(sulphates , .25)) %>%
+  ggplot(aes(sulphates)) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+
+```
+## Plots for 'fixed.acidity' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_facidity}
+#to identify bin width size and IQR range
+summary(rw_df$fixed.acidity)
+```
+```{r echo=FALSE}
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_facidity1}
+#initial plot
+ggplot(aes(fixed.acidity), data=rw_df) + geom_histogram(binwidth = .1)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 0.1
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_facidity_1}
+#remove outliers
+facidity_graph <- rw_df %>%
+  subset(fixed.acidity < quantile(fixed.acidity , .98)) %>%
+  subset(fixed.acidity > quantile(fixed.acidity , .01))
+
+  ggplot(aes(fixed.acidity),data = facidity_graph) + 
+    geom_histogram(binwidth = .1) +
+    geom_vline(xintercept = 
+                 quantile(facidity_graph$fixed.acidity,0.25), color='red') +
+    geom_vline(xintercept = 
+                 quantile(facidity_graph$fixed.acidity,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_facidity_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(fixed.acidity < quantile(fixed.acidity , .75)) %>%
+  subset(fixed.acidity > quantile(fixed.acidity , .25)) %>%
+  ggplot(aes(fixed.acidity)) + geom_histogram(binwidth = .1)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+## Plots for 'volatile.acidity' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_vacidity}
+#to identify bin width size and IQR range
+summary(rw_df$volatile.acidity)
+```
+```{r echo=FALSE}
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_vacidity1}
+#initial plot
+ggplot(aes(volatile.acidity), data=rw_df) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 0.01
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_vacidity_1}
+#remove outliers
+vacidity_graph <- rw_df %>%
+  subset(volatile.acidity < quantile(volatile.acidity , .98)) %>%
+  subset(volatile.acidity > quantile(volatile.acidity , .01))
+
+  ggplot(aes(volatile.acidity),data = vacidity_graph) + 
+    geom_histogram(binwidth = .01) +
+    geom_vline(xintercept = 
+                 quantile(vacidity_graph$volatile.acidity,0.25), color='red') +
+    geom_vline(xintercept = 
+                 quantile(vacidity_graph$volatile.acidity,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_vacidity_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(volatile.acidity < quantile(volatile.acidity , .75)) %>%
+  subset(volatile.acidity > quantile(volatile.acidity , .25)) %>%
+  ggplot(aes(volatile.acidity)) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Plots for 'citric.acid' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_cacid}
+#to identify bin width size and IQR range
+summary(rw_df$citric.acid)
+```
+```{r echo=FALSE}
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_cacid1}
+#initial plot
+ggplot(aes(citric.acid), data=rw_df) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 0.01
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_cacid_1}
+#remove outliers
+cacidity_graph <- rw_df %>%
+  subset(citric.acid < quantile(citric.acid , .98)) %>%
+  subset(citric.acid > quantile(citric.acid , .01))
+
+  ggplot(aes(citric.acid),data = cacidity_graph) + 
+    geom_histogram(binwidth = .01) +
+    geom_vline(xintercept = 
+                 quantile(cacidity_graph$citric.acid,0.25), color='red') +
+    geom_vline(xintercept = 
+                 quantile(cacidity_graph$citric.acid,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_cacid_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(citric.acid < quantile(citric.acid , .75)) %>%
+  subset(citric.acid > quantile(citric.acid , .25)) %>%
+  ggplot(aes(citric.acid)) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+## Plots for 'residual.sugar' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_rsugar}
+#to identify bin width size and IQR range
+summary(rw_df$residual.sugar)
+```
+```{r echo=FALSE}
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_rsugar1}
+#initial plot
+ggplot(aes(residual.sugar), data=rw_df) + geom_histogram(binwidth = .1)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 0.1
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_rsugar_1}
+#remove outliers
+rsugar_graph <- rw_df %>%
+  subset(residual.sugar < quantile(residual.sugar , .94)) %>%
+  subset(residual.sugar > quantile(residual.sugar , .01))
+
+  ggplot(aes(residual.sugar),data = rsugar_graph) + 
+    geom_histogram(binwidth = .1) +
+    geom_vline(xintercept = 
+                 quantile(rsugar_graph$residual.sugar,0.25), color='red') +
+    geom_vline(xintercept = 
+                 quantile(rsugar_graph$residual.sugar,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_rsugar_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(residual.sugar < quantile(residual.sugar , .75)) %>%
+  subset(residual.sugar > quantile(residual.sugar , .25)) %>%
+  ggplot(aes(residual.sugar)) + geom_histogram(binwidth = .1)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Plots for 'chlorides' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_chlorides}
+#to identify bin width size and IQR range
+summary(rw_df$chlorides)
+
+#initial plot
+ggplot(aes(chlorides), data=rw_df) + geom_histogram(binwidth = .001)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 0.001
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_chlorides_1}
+#remove outliers
+chlorides_graph <- rw_df %>%
+  subset(chlorides < quantile(chlorides , .95)) %>%
+  subset(chlorides > quantile(chlorides , .01))
+
+  ggplot(aes(chlorides),data = chlorides_graph) + 
+    geom_histogram(binwidth = .001) +
+    geom_vline(xintercept = 
+                 quantile(chlorides_graph$chlorides,0.25), color='red') +
+    geom_vline(xintercept = 
+                 quantile(chlorides_graph$chlorides,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_chlorides_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(chlorides < quantile(chlorides , .75)) %>%
+  subset(chlorides > quantile(chlorides , .25)) %>%
+  ggplot(aes(chlorides)) + geom_histogram(binwidth = .001)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Plots for 'free.sulfur.dioxode' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_fsdioxide}
+#to identify bin width size and IQR range
+summary(rw_df$free.sulfur.dioxide)
+```
+```{r echo=FALSE}
+
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_fsdioxide1}
+#initial plot
+ggplot(aes(free.sulfur.dioxide), data=rw_df) + geom_histogram(binwidth = 1)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 1
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_fsdioxide_1}
+#remove outliers
+fsdioxide_graph <- rw_df %>%
+  subset(free.sulfur.dioxide < quantile(free.sulfur.dioxide , .95)) %>%
+  subset(free.sulfur.dioxide > quantile(free.sulfur.dioxide , .01))
+
+  ggplot(aes(free.sulfur.dioxide),data = fsdioxide_graph) + 
+    geom_histogram(binwidth = 1) +
+    geom_vline(xintercept = 
+            quantile(fsdioxide_graph$free.sulfur.dioxide,0.25), color='red') +
+    geom_vline(xintercept = 
+            quantile(fsdioxide_graph$free.sulfur.dioxide,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_fsdioxide_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(free.sulfur.dioxide < quantile(free.sulfur.dioxide , .75)) %>%
+  subset(free.sulfur.dioxide > quantile(free.sulfur.dioxide , .25)) %>%
+  ggplot(aes(free.sulfur.dioxide)) + geom_histogram(binwidth = 1)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Analysis on 'total.sulfur.dioxide' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_tsdioxide}
+#to identify bin width size and IQR range
+summary(rw_df$total.sulfur.dioxide)
+
+#initial plot
+ggplot(aes(total.sulfur.dioxide), data=rw_df) + geom_histogram(binwidth = 1)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 1
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_tsdioxide_1}
+#remove outliers
+fsdioxide_graph <- rw_df %>%
+  subset(total.sulfur.dioxide < quantile(total.sulfur.dioxide , .90)) %>%
+  subset(total.sulfur.dioxide > quantile(total.sulfur.dioxide , .01))
+
+  ggplot(aes(total.sulfur.dioxide),data = fsdioxide_graph) + 
+    geom_histogram(binwidth = 1) +
+    geom_vline(xintercept = 
+            quantile(fsdioxide_graph$total.sulfur.dioxide,0.25), color='red') +
+    geom_vline(xintercept = 
+            quantile(fsdioxide_graph$total.sulfur.dioxide,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_tsdioxide_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(total.sulfur.dioxide < quantile(total.sulfur.dioxide , .75)) %>%
+  subset(total.sulfur.dioxide > quantile(total.sulfur.dioxide , .25)) %>%
+  ggplot(aes(total.sulfur.dioxide)) + geom_histogram(binwidth = 1)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Plots for 'density' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_density}
+#to identify bin width size and IQR range
+summary(rw_df$density)
+
+#initial plot
+ggplot(aes(density), data=rw_df) + geom_histogram(binwidth = .0001)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = .0001
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_density_1}
+#remove outliers
+density_graph <- rw_df %>%
+  subset(density < quantile(density , .95)) %>%
+  subset(density > quantile(density , .05))
+
+  ggplot(aes(density),data = density_graph) + 
+    geom_histogram(binwidth = .0001) +
+    geom_vline(xintercept = 
+            quantile(density_graph$density,0.25), color='red') +
+    geom_vline(xintercept = 
+            quantile(density_graph$density,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_density_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(density < quantile(density , .75)) %>%
+  subset(density > quantile(density , .25)) %>%
+  ggplot(aes(density)) + geom_histogram(binwidth = .0001)+
+  scale_x_continuous(breaks = seq(.99,.999,by = .001))
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Plots for 'pH' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_pH}
+#to identify bin width size and IQR range
+summary(rw_df$pH)
+
+#initial plot
+ggplot(aes(pH), data=rw_df) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+#### Initial plot with binwidth = 0.01
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_pH_1}
+#remove outliers
+pH_graph <- rw_df %>%
+  subset(pH < quantile(pH , .95)) %>%
+  subset(pH > quantile(pH , .05))
+
+  ggplot(aes(pH),data = pH_graph) + 
+    geom_histogram(binwidth = .01) +
+    geom_vline(xintercept = 
+            quantile(pH_graph$pH,0.25), color='red') +
+    geom_vline(xintercept = 
+            quantile(pH_graph$pH,0.75), color='red') 
+```
+```{r echo=FALSE}
+
+```
+#### The above graph is with the outlier removed and indicates the IQR ranges
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_pH_2}
+#IQR to visualize the dense population
+rw_df %>%
+  subset(pH < quantile(pH , .75)) %>%
+  subset(pH > quantile(pH , .25)) %>%
+  ggplot(aes(pH)) + geom_histogram(binwidth = .01)
+```
+```{r echo=FALSE}
+
+```
+####Graph with data points in IQR.
+##Plots for feature of interest - 'quality' variable
+```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_quality}
+#to identify bin width size and IQR range
+summary(rw_df_1$quality)
+
+#initial plot
+ggplot(aes(quality), data=rw_df_1) + geom_histogram(binwidth = .5) +
+  scale_x_continuous(breaks = seq(3,8))
+
+```
+```{r echo=FALSE}
+
+```
+####Clearly we can see that samples are too low for very good and very bad quality red wine. This may cause the model generated out of it to be biased to predict always the average quality of red wine. 
+
+#### Let us now see the standard deviation of each variable. Note that for comparision between 2 variables we must be normalize the variables. MinMax scaling technique has been used to re-scale the variables between 0-1.
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+#to compare the variable we need to scale to the same level
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+
+#apply the normalization to all variables
+drops <- c("X","quality")
+rw_df_new <- rw_df[ , !(names(rw_df) %in% drops)]
+dfNorm <- as.data.frame(lapply(rw_df_new, normalize))
+
+
+
+#compute the standard deviation for all the variables
+apply(dfNorm,2,sd)
+```
+#### Initial plot with binwidth = .5 for clear seperation of unique values for the variable.
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+#####The Dataset has 13 variables; out of which first one is just the serial number and can be omitted. There are no categorical variables. However, quality can be viewed as both categorical or continuous numerical values.
+
+### What is/are the main feature(s) of interest in your dataset?
+#####Main feature of interest is 'quality'. The task is to identify the right combination available variables to come up with the formula to have the higher quality certificate from the expert's review.
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+
+####Following  are the top 5 variables with high value of standard deviation:
+####1. Citric Acid
+####2. Alcohol
+####3. fixed.acidity
+####4. free.sulfur.dioxide
+####5. density
+
+#### My view is that if the variables show high standard deviation then the variable show different value range for different classes for feature of interest.
+
+### Did you create any new variables from existing variables in the dataset?
+#####No. There were no new variables created.
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+#####I have changed the type of 'quality' variable to factor. There are 2 reasons for the same. One is to be able to use as categorial variable to identify the impact of other variables on it through the use of facet_wrap function.
+
+#####The other reason is to clearly be able to draw boxplot. Boxplot allows not only to scope of the variable values but also the marks the mean of variable values which help in comparing with other categorical values.
+
+#####I have also transformed data through minmax scaler to compare the 2 variable's standard deviations.
+
+# Bivariate Plots Section
+#### In the below Density plots, variables indicates positive or negative influence of on the 'quality' variables. Let us first plot the those variables which we have shortlisted in the univariate analysis. Let us confirm if those variables indeed makes the impact to the feature of interest.
+
+```{r echo=FALSE}
+
+```
+####1. Citric.acid vs quality plot
+```{r echo=FALSE, warning=FALSE, info=FALSE , Bivariate_Plots_cacid}
+rw_df %>%
+  subset(citric.acid < quantile(citric.acid , .98)) %>%
+  subset(citric.acid > quantile(citric.acid , .01)) %>%
+  ggplot(aes(citric.acid)) + 
+      geom_histogram(aes(y= ..density..), binwidth = .01,alpha =.5) + 
+      geom_density(col=2) +
+      facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+####Here we clearly see the density curve pointing higher values of citric.acid value for higher quality.Note that, current plotting leverages the same ranges used to remove outliers in case of univariate analysis.
+
+####2. alcohol vs quality plot
+```{r echo=FALSE, warning=FALSE, info=FALSE , Bivariate_Plots_alcohol}
+rw_df %>%
+  subset(alcohol < quantile(alcohol , .99)) %>%
+  subset(alcohol > quantile(alcohol , .01)) %>%
+  ggplot(aes(alcohol)) +
+      geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
+      geom_density(col=2) +
+      facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+####Again, density curve pointing higher values of acohol units for higher quality can be easily observed.
+
+####3. fixed.acidity vs quality plot
+```{r echo=FALSE, warning=FALSE, info=FALSE , Bivariate_Plots_fixed}
+#density graph with density curve for each quality
+rw_df %>%
+  subset(fixed.acidity < quantile(fixed.acidity , .98)) %>%
+  subset(fixed.acidity > quantile(fixed.acidity , .01)) %>%
+  ggplot(aes(fixed.acidity)) + 
+      geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
+      geom_density(col=2) +
+      facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+
+
+####4. free.sulfur.dioxide vs quality plot
+```{r echo=FALSE, warning=FALSE, info=FALSE , Bivariate_Plots_fso2}
+#density graph with density curve for each quality
+rw_df %>%
+  subset(free.sulfur.dioxide < quantile(free.sulfur.dioxide , .95)) %>%
+  subset(free.sulfur.dioxide > quantile(free.sulfur.dioxide , .01)) %>%
+  ggplot(aes(free.sulfur.dioxide)) + 
+      geom_histogram(aes(y= ..density..), binwidth = 1,alpha =.5) + 
+      geom_density(col=2) +
+      facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+####Unlike expected we do not see the density varying for different quality. 
+####5. density vs quality plot
+```{r echo=FALSE, warning=FALSE, info=FALSE , Bivariate_Plots_density}
+#density graph with density curve for each quality
+rw_df %>%
+  subset(density < quantile(density , .95)) %>%
+  subset(density > quantile(density , .05)) %>%
+  ggplot(aes(density)) + 
+      geom_histogram(aes(y= ..density..), binwidth = .0001,alpha =.5) + 
+      geom_density(col=2) +
+      facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+####Again, Unlike expected, we do not see the density varying for different quality. Though there is variation in frequency but the peak density remains at the center.
+
+#### Let us see co relation between the variables and identify the variables impacting feature of interest. fixed.acidity, free.sulfur.dioxide and density did not show expected density curve, so let us start with identifying alternatives for these variables by looking at the co relation with other variables.
+```{r echo=FALSE, warning=FALSE, info= FALSE, Bivariate_Plots_corr}
+rw_new <- rw_df
+colnames(rw_new)[2] <- "fix.acidity"
+ggcorr(rw_new[, 2:13], geom = "blank", label = TRUE, hjust = 0.6, size = 2.5) +
+  geom_point(size = 10, 
+             aes(color = coefficient > 0, alpha = abs(coefficient) >= 0.5)) +
+             scale_alpha_manual(values = c("TRUE" = 0.5, "FALSE" = 0))+
+             guides(color = FALSE, alpha = FALSE)
+#cor(rw_new$density,rw_new$alcohol)
+```
+```{r echo=FALSE}
+
+```
+#### Above correlation map between the variables gives valueable hint about the variable influencing the feature of interest variable.
+
+#### The idea is that we would include both variables which are highly correlated either positive or negative. We choose one of them which makes the positive impact on the feature of interest.
+
+#### In the correlation table, identify a column or a row with high number variance. fixed.acidity (row) in the above table has 3 of the variable highly correlated with it. In other words this variable can substitue those 3 variables (citric.acid, density & pH). No let us is there any variable transitively correlated to fixed.acidity variable. Note that we refer correlation value of 0.5 or greater as "high correlation".
+
+#### 1. fixed.acidity has high correlation to citric.acid. Citric.acid has high correlation to pH. So fixed acidity can replace pH variable. However, we had already shortlisted pH as it has direct correlation as well with fixed.acidity. We have volatile.acidity having high correlation with citric.acidity. so fixed.acidity can replace volatile.acidity too.
+
+#### 2. fixed.acidity has high correlation to density. However, density has no high correlation to anyother variable. Note that the graph indicate 0.5 value for the correlation between density and alcohol but it is a rounded value and hence even the plot did not color it as high.
+
+#### 3. fixed.acidity --> pH --> citric.acid is already discussed in point #1
+
+#### That leaves following as the independent contibutor to feature of interest
+#### 1. fixed.acidity
+#### 2. residual.sugar
+#### 3. chlorides
+#### 4. free/total.sufur.dioxide [we need to choose one but how ?]
+#### 5. sulphates
+#### 6. alcohol
+
+#### We have cut down from 11 variable to 6 variables contributing to feature of interest. Note that free.sulfur.dioxide and total.sulfur.dioxide have high correlation between them. I have chosen free.sulfur.dioxide over total.sulfur.dioxide because former has the hight standard deviation.
+
+#### Let us check the impact of outlier removal on the correlation analysis that we have done above
+
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+rw_df_woo <- rw_df_1
+summary(rw_df_woo)
+
+remove_outlier <- function(x) {
+  first_quantile <- quantile(x, 0.25)
+  third_quantile <- quantile(x, 0.75)
+  median_x = median(x)
+  #median_v <- ( first_quantile + third_quantile ) /2
+  #y <- x[x > first_quantile]
+  #y <- y[y < third_quantile]
+  #print(median(x))
+  #print(median(y))
+  x[x<first_quantile] <- median_x
+  x[x>third_quantile] <- median_x
+  
+  return (x)
+}
+
+rw_df_woo$fixed.acidity <- remove_outlier(rw_df_woo$fixed.acidity)
+rw_df_woo$volatile.acidity <- remove_outlier(rw_df_woo$volatile.acidity)
+rw_df_woo$citric.acid <- remove_outlier(rw_df_woo$citric.acid)
+rw_df_woo$residual.sugar <- remove_outlier(rw_df_woo$residual.sugar)
+rw_df_woo$chlorides <- remove_outlier(rw_df_woo$chlorides)
+rw_df_woo$free.sulfur.dioxide <- remove_outlier(rw_df_woo$free.sulfur.dioxide)
+rw_df_woo$total.sulfur.dioxide <- remove_outlier(rw_df_woo$total.sulfur.dioxide)
+rw_df_woo$density <- remove_outlier(rw_df_woo$density)
+rw_df_woo$pH <- remove_outlier(rw_df_woo$pH)
+rw_df_woo$sulphates <- remove_outlier(rw_df_woo$sulphates)
+rw_df_woo$alcohol <- remove_outlier(rw_df_woo$alcohol)
+
+ggcorr(rw_df_woo[, 2:13], geom = "blank", label = TRUE, hjust = 0.6, size = 2
+       ) +
+  geom_point(size = 10, 
+             aes(color = coefficient > 0, alpha = abs(coefficient) >= 0.2)) +
+             scale_alpha_manual(values = c("TRUE" = 0.5, "FALSE" = 0))+
+             guides(color = FALSE, alpha = FALSE)
+#ggcorr(rw_df_woo[, 2:13],label = TRUE)
+#cor(rw_df_woo$fixed.acidity, rw_df_woo$citric.acid)
+#cor(rw_df_1$fixed.acidity, rw_df_1$quality)
+#cor(rw_df_1$volatile.acidity, rw_df_1$quality)
+#cor(rw_df_1$citric.acid, rw_df_1$quality)
+#cor(rw_df_1$residual.sugar, rw_df_1$quality)
+#cor(rw_df_1$chlorides, rw_df_1$quality)
+#cor(rw_df_1$free.sulfur.dioxide, rw_df_1$quality)
+#cor(rw_df_1$total.sulfur.dioxide, rw_df_1$quality)
+#cor(rw_df_1$density, rw_df_1$quality)
+#cor(rw_df_1$pH, rw_df_1$quality)
+#cor(rw_df_1$sulphates, rw_df_1$quality)
+#cor(rw_df_1$alcohol, rw_df_1$quality)
+#summary(rw_df_woo)
+#cor(rw_df_woo$alcohol, rw_df_woo$quality)
+#cor(rw_df_woo$sulphates, rw_df_woo$quality)
+```
+```{r echo=FALSE}
+
+```
+####Outlier removal did impact the values of the correlation values between the variables. Sulphates now do not have correlation between dioxides and chlorides. Correlation between fixed.acidity and citric.acid , fixed.acidity density and citric.acid and ph have got diluted a bit. However, total.sulfur.dioxide and free.sulfur.dioxide still show comparitively high correlation value.
+
+####Now with the inclusion of the quality variable in the correlation table, it is far easy to understand the impact dependent variable on the independent variable. Earlier, we had created list of variables without considering the impact on feature of interest. It was based on correlation between independent variables. Below are the llst of variable sorted based on high correlation value with feature of interest :
+####1. Alcohol
+####2. sulphates
+####3. citric.acid
+####4. fixed.acidity
+####5. residual.sugar
+
+####Let us have couple of plot on high and low correlation values from the above plot.
+####Low Corelation with outlier :
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+ggplot(aes(residual.sugar,quality), data=rw_df_1) + 
+  geom_point(position='jitter')+
+  geom_smooth(method = 'gam')
+```
+```{r echo=FALSE}
+
+```
+##### Correlation between residual.sugar and quality is zero. It can be seen from the above plot that increase in sugar value did not change quality. In other words, all quality varieties have varied residual.sugar.
+
+```{r echo=FALSE}
+
+```
+####Low Corelation without outlier:
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+ggplot(aes(residual.sugar,quality), data=rw_df_woo) + 
+  geom_point(position = 'jitter')+
+  geom_smooth(method = 'gam')
+```
+```{r echo=FALSE}
+
+```
+##### Outliers are shifted to median value. Hence, we see dense jitter plots at center of the plot.
+
+
+#### Let us see the residual.sugar density variations for different quality values.
+```{r echo=FALSE, warning=FALSE, info= FALSE, Bivariate_Plots_rsugar}
+summary(rw_df_1$residual.sugar)
+rw_df %>%
+  subset(residual.sugar < quantile(residual.sugar , .94)) %>%
+  subset(residual.sugar > quantile(residual.sugar , .01)) %>%
+  ggplot(aes(quality,residual.sugar))+
+  geom_boxplot()
+
+  #facet_wrap(~quality, scales = "free_y")
+  #ggplot(aes(residual.sugar)) + 
+  #    geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
+  #    geom_density(col=2) +
+  #    facet_wrap(~quality, scales = "free_y")
+```
+
+```{r echo=FALSE}
+
+```
+#### High Correlation with Outliers:
+```{r echo=FALSE, warning=FALSE, info= FALSE, Bivariate_Plots_tdioxide}
+ggplot(aes(free.sulfur.dioxide, total.sulfur.dioxide), data=rw_df) + 
+  geom_smooth(method = 'gam') +
+  geom_point()
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+
+```
+#### Note that here correlation is 0.7
+
+#### High Correlation without Outliers:
+```{r echo=FALSE, warning=FALSE, info= FALSE, Bivariate_Plots_dioxide}
+ggplot(aes(free.sulfur.dioxide, total.sulfur.dioxide), data=rw_df_woo) + 
+  geom_smooth(method = 'gam') +
+  geom_point(position='jitter')
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+
+```
+#### Note that here correlation is 0.2. We have a cross mark formed in the graph due to outlier being mapped to median value.
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+#####In the univariate analysis we had shortlisted the variables highly impacting the feature of interest. However, correlation analysis between the independent variables and dependent variables indicates high standard deviation might no indicate high correlation with the feature of interest.
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+#####residual.sugar indicates no correlation to feature of interest. Boxplot indicates that range has higher limit set for 2.5 for all the quality variable values. And mean is same for all the different quality variable values.
+
+### What was the strongest relationship you found?
+#####Strongest relation was found between the two dioxides (correlation value = 0.8).
+
+# Multivariate Plots Section
+#### In the previous section we had sorted the variables based on their correlation to feature of interest. Let us see now the correlation between them for differnt quality
+
+#### alcohol vs sulphate with outlier
+```{r echo=FALSE, Multivariate_Plots_alcohol_sulphates_o}
+ggplot(aes(alcohol, sulphates, color=quality), data=rw_df_1) + 
+  geom_smooth(method = 'gam' ) + geom_point()+ facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+#### alcohol vs sulphaes without outlier
+```{r echo=FALSE, Multivariate_Plots_alcohol_sulphates_woo}
+ggplot(aes(alcohol, sulphates, color=quality), data=rw_df_woo) + 
+  geom_smooth(method = 'gam' ) + geom_point()+ facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+#### The above plot observation matches with correlation table. As the variable has very low correation; changes in one variable has no impact on the other. For various alcohol values the above plot indicates value around 0.65 for sulphates for samples with or without outlier. Note that corelation between alcohol and sulphates are same for with or without outlier samples.
+
+#### fixed.acidity vs citric.acid with outlier
+```{r echo=FALSE, Multivariate_Plots_fixed_citric_o}
+ggplot(aes(fixed.acidity, citric.acid, color=quality), data=rw_df_1) + 
+  geom_smooth(method = 'gam' ) + geom_point()+ 
+  facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+#### Note that citric acid and fixed acidity has positive correlation between them. Moreover, both of them have positive correlation with quality. Hence we see that those two adds up to the quality in all cases.
+
+#### fixed.acidity vs citric.acid without outlier
+```{r echo=FALSE, Multivariate_Plots_alcohol_facidity_woo}
+ggplot(aes(fixed.acidity, citric.acid, color=quality), data=rw_df_woo) + 
+  geom_smooth(method = 'gam' ) + geom_point()+ 
+  facet_wrap(~quality, scales = "free_y")
+```
+```{r echo=FALSE}
+
+```
+#### With outlier shifted to median we have slight variation in the correlation line plot. However, still we see positive impact of both variables in most of the quality values.
+
+#### As a last plot let us now see the all the 4 variables in a line chart showing its impact on quality.
+```{r echo=FALSE, Multivariate_Plots}
+
+rw_mean_summary <- rw_df_1 %>%
+  group_by(quality) %>%
+  summarise(mean_alcohol = mean(alcohol),
+            mean_sulphates = mean(sulphates),
+            mean_fixed.acidity = mean(fixed.acidity),
+            mean_citric.acid = mean(citric.acid)
+            )
+
+rw_mean_summary_norm <- as.data.frame(lapply(rw_mean_summary, normalize))
+rw_mean_summary_norm$quality <- rw_mean_summary$quality
+
+rw_melts <- melt(rw_mean_summary_norm, id='quality')
+#print(rw_melts)
+ggplot(aes(quality,value, color = variable), data = rw_melts) + 
+  geom_point() + geom_line()
+  
+```
+```{r echo=FALSE, warning=FALSE, info= FALSE}
+
+```
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+#####Data set variables which have positive correlation to quality were shortlisted in the previous section. In this section plots were carried out to see combined effect of couple of those variables on quality variable.
+
+### Were there any interesting or surprising interactions between features?
+
+#####fixed acidity and citric acid have positive correlation and fixed acidity shows high variance when compared to citric acidity. Hence we may opt to model with only alcohol, sulphates and citric acid from the data set to predict the  quality variable.
+
+### OPTIONAL: Did you create any models with your dataset? Discuss the \
+strengths and limitations of your model.
+
+#####I wrote a python program to build a decision tree regression model. The model has very low accuray(28-30%). The model feature_importances_ also gave similar conclusion as that of above in regards to the variables impacting the quality.
+
+------
+
+# Final Plots and Summary
+
+### Plot One
+```{r echo=FALSE, Plot_One}
+ggplot(aes(residual.sugar), data=rw_df) + 
+  geom_histogram(binwidth = .1) +
+  ggtitle("Variable with farthest Outlier")
+```
+```{r echo=FALSE}
+
+```
+
+### Description One
+#####Residual sugar has the farthest outlier. Ratio of Max value to the median is highest(7.7) when compared with other variable. Co incidentally, the variable has no correlation with feature of interest even with the outlier removed.
+
+### Plot Two
+```{r echo=FALSE, Plot_Two}
+rw_df %>%
+  subset(alcohol < quantile(alcohol , .99)) %>%
+  subset(alcohol > quantile(alcohol , .01)) %>%
+  ggplot(aes(alcohol)) +
+      geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
+      geom_density(col=2) +
+      facet_wrap(~quality, scales = "free_y") +
+      ggtitle("Variable with clear density variations across Quality")
+```
+```{r echo=FALSE}
+
+```
+
+### Description Two
+#####Alcohol has the highest correlation with quality.0.19 with outlier removed. Making it the most favourable variable for modelling.
+
+### Plot Three
+```{r echo=FALSE, }
+
+```
+```{r echo=FALSE, Plot_Three}
+ggplot(aes(quality,value, color = variable), data = rw_melts) + 
+  geom_point() + geom_line() +
+  ggtitle("Mean comparison of variables on Quality")
+```
+```{r echo=FALSE, }
+
+```
+### Description Three
+```{r echo=FALSE, }
+
+```
+#####Here the comparison of the impact of top 4 influential variables on quality can be seen. This also suggests that citric acid can be better over fixed acidity as citric acid shows linear correlation with quality.
+
+------
+
+# Reflection
+
+####The intension of the EDA on red wine data set was to check if it can be used to model for a quality prediction.
+
+####There are 11 variables but still as most of them are co related with each other,the only few are useful for modelling.
+
+####Even if we have 1599 observations, the observations are not uniformly distributed with respect to quality. As we have very less observation relating high quality red wines very fine quality wines might be classified as outlier in our model.
+
+####Need more quality (different variables) and quantity (homogeneous mixture of "quality" variables.) to build a model to predict quality of the red wine.
