@@ -430,7 +430,7 @@ the dataset?
 #### Note that citric acid and fixed acidity has positive correlation between them. Moreover, both of them have positive correlation with quality. Hence we see that those two adds up to the quality in all cases.
 
 #### fixed.acidity vs citric.acid without outlier
-![](wineQualityReds_files/figure-html/Multivariate_Plots_alcohol_facidity_woo-1.png)<!-- -->
+![](wineQualityReds_files/figure-html/Multivariate_Plots_facidity_woo-1.png)<!-- -->
 
 #### With outlier shifted to median we have slight variation in the correlation line plot. However, still we see positive impact of both variables in most of the quality values.
 

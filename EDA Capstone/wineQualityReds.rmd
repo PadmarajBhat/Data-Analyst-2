@@ -70,7 +70,9 @@ summary(rw_df$alcohol)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Alcohol1}
 #initial plot
-ggplot(aes(alcohol), data=rw_df) + geom_histogram(binwidth = .1)
+ggplot(aes(alcohol), data=rw_df) + 
+  geom_histogram(binwidth = .1) +
+  xlab("Alcohol (%)")
 ```
 ```{r echo=FALSE}
 
@@ -85,7 +87,8 @@ rw_df %>%
   subset(alcohol > quantile(alcohol , .01)) %>%
   ggplot(aes(alcohol)) + geom_histogram(binwidth = .1) +
   geom_vline(xintercept = quantile(rw_df$alcohol,0.25), color='red') +
-  geom_vline(xintercept = quantile(rw_df$alcohol,0.75), color='red') 
+  geom_vline(xintercept = quantile(rw_df$alcohol,0.75), color='red') +
+  xlab("Alcohol (%)")
 ```
 ```{r echo=FALSE}
 
@@ -98,7 +101,8 @@ rw_df %>%
 rw_df %>%
   subset(alcohol < quantile(alcohol , .75)) %>%
   subset(alcohol > quantile(alcohol , .25)) %>%
-  ggplot(aes(alcohol)) + geom_histogram(binwidth = .1)
+  ggplot(aes(alcohol)) + geom_histogram(binwidth = .1) +
+  xlab("Alcohol (%)")
 
 ```
 ```{r echo=FALSE}
@@ -122,7 +126,9 @@ summary(rw_df$sulphates)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_Sulphates__1}
 #initial plot
-ggplot(aes(sulphates), data=rw_df) + geom_histogram(binwidth = .01)
+ggplot(aes(sulphates), data=rw_df) + 
+  geom_histogram(binwidth = .01) +
+  xlab("Sulphates (g/dm3)")
 ```
 ```{r echo=FALSE}
 
@@ -140,7 +146,8 @@ sulphates_graph <- rw_df %>%
     geom_vline(xintercept =
                  quantile(sulphates_graph$sulphates,0.25), color='red') +
     geom_vline(xintercept = 
-               quantile(sulphates_graph$sulphates,0.75), color='red') 
+               quantile(sulphates_graph$sulphates,0.75), color='red') +
+    xlab("Sulphates (g/dm3)")
 ```
 ```{r echo=FALSE}
 
@@ -154,7 +161,8 @@ sulphates_graph <- rw_df %>%
 rw_df %>%
   subset(sulphates < quantile(sulphates , .75)) %>%
   subset(sulphates > quantile(sulphates , .25)) %>%
-  ggplot(aes(sulphates)) + geom_histogram(binwidth = .01)
+  ggplot(aes(sulphates)) + geom_histogram(binwidth = .01) +
+  xlab("Sulphates (g/dm3)")
 ```
 ```{r echo=FALSE}
 
@@ -170,7 +178,8 @@ summary(rw_df$fixed.acidity)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_facidity1}
 #initial plot
-ggplot(aes(fixed.acidity), data=rw_df) + geom_histogram(binwidth = .1)
+ggplot(aes(fixed.acidity), data=rw_df) + geom_histogram(binwidth = .1) +
+  xlab("Fixed Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -187,7 +196,8 @@ facidity_graph <- rw_df %>%
     geom_vline(xintercept = 
                  quantile(facidity_graph$fixed.acidity,0.25), color='red') +
     geom_vline(xintercept = 
-                 quantile(facidity_graph$fixed.acidity,0.75), color='red') 
+                 quantile(facidity_graph$fixed.acidity,0.75), color='red') +
+    xlab("Fixed Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -198,7 +208,8 @@ facidity_graph <- rw_df %>%
 rw_df %>%
   subset(fixed.acidity < quantile(fixed.acidity , .75)) %>%
   subset(fixed.acidity > quantile(fixed.acidity , .25)) %>%
-  ggplot(aes(fixed.acidity)) + geom_histogram(binwidth = .1)
+  ggplot(aes(fixed.acidity)) + geom_histogram(binwidth = .1) +
+  xlab("Fixed Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -214,7 +225,8 @@ summary(rw_df$volatile.acidity)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_vacidity1}
 #initial plot
-ggplot(aes(volatile.acidity), data=rw_df) + geom_histogram(binwidth = .01)
+ggplot(aes(volatile.acidity), data=rw_df) + geom_histogram(binwidth = .01) +
+  xlab("Volatile Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -231,7 +243,8 @@ vacidity_graph <- rw_df %>%
     geom_vline(xintercept = 
                  quantile(vacidity_graph$volatile.acidity,0.25), color='red') +
     geom_vline(xintercept = 
-                 quantile(vacidity_graph$volatile.acidity,0.75), color='red') 
+                 quantile(vacidity_graph$volatile.acidity,0.75), color='red') +
+    xlab("Volatile Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -242,7 +255,8 @@ vacidity_graph <- rw_df %>%
 rw_df %>%
   subset(volatile.acidity < quantile(volatile.acidity , .75)) %>%
   subset(volatile.acidity > quantile(volatile.acidity , .25)) %>%
-  ggplot(aes(volatile.acidity)) + geom_histogram(binwidth = .01)
+  ggplot(aes(volatile.acidity)) + geom_histogram(binwidth = .01) +
+  xlab("Volatile Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -258,7 +272,8 @@ summary(rw_df$citric.acid)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_cacid1}
 #initial plot
-ggplot(aes(citric.acid), data=rw_df) + geom_histogram(binwidth = .01)
+ggplot(aes(citric.acid), data=rw_df) + geom_histogram(binwidth = .01) +
+  xlab("Citric Acid (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -275,7 +290,8 @@ cacidity_graph <- rw_df %>%
     geom_vline(xintercept = 
                  quantile(cacidity_graph$citric.acid,0.25), color='red') +
     geom_vline(xintercept = 
-                 quantile(cacidity_graph$citric.acid,0.75), color='red') 
+                 quantile(cacidity_graph$citric.acid,0.75), color='red') +
+    xlab("Citric Acid (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -286,7 +302,8 @@ cacidity_graph <- rw_df %>%
 rw_df %>%
   subset(citric.acid < quantile(citric.acid , .75)) %>%
   subset(citric.acid > quantile(citric.acid , .25)) %>%
-  ggplot(aes(citric.acid)) + geom_histogram(binwidth = .01)
+  ggplot(aes(citric.acid)) + geom_histogram(binwidth = .01) +
+  xlab("Citric Acid (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -302,7 +319,8 @@ summary(rw_df$residual.sugar)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_rsugar1}
 #initial plot
-ggplot(aes(residual.sugar), data=rw_df) + geom_histogram(binwidth = .1)
+ggplot(aes(residual.sugar), data=rw_df) + geom_histogram(binwidth = .1) +
+  xlab("Residual Sugar (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -319,7 +337,8 @@ rsugar_graph <- rw_df %>%
     geom_vline(xintercept = 
                  quantile(rsugar_graph$residual.sugar,0.25), color='red') +
     geom_vline(xintercept = 
-                 quantile(rsugar_graph$residual.sugar,0.75), color='red') 
+                 quantile(rsugar_graph$residual.sugar,0.75), color='red') +
+    xlab("Residual Sugar (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -330,7 +349,8 @@ rsugar_graph <- rw_df %>%
 rw_df %>%
   subset(residual.sugar < quantile(residual.sugar , .75)) %>%
   subset(residual.sugar > quantile(residual.sugar , .25)) %>%
-  ggplot(aes(residual.sugar)) + geom_histogram(binwidth = .1)
+  ggplot(aes(residual.sugar)) + geom_histogram(binwidth = .1) +
+  xlab("Residual Sugar (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -342,7 +362,8 @@ rw_df %>%
 summary(rw_df$chlorides)
 
 #initial plot
-ggplot(aes(chlorides), data=rw_df) + geom_histogram(binwidth = .001)
+ggplot(aes(chlorides), data=rw_df) + geom_histogram(binwidth = .001) +
+  xlab("Chlorides (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -359,7 +380,8 @@ chlorides_graph <- rw_df %>%
     geom_vline(xintercept = 
                  quantile(chlorides_graph$chlorides,0.25), color='red') +
     geom_vline(xintercept = 
-                 quantile(chlorides_graph$chlorides,0.75), color='red') 
+                 quantile(chlorides_graph$chlorides,0.75), color='red') +
+    xlab("Chlorides (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -370,7 +392,8 @@ chlorides_graph <- rw_df %>%
 rw_df %>%
   subset(chlorides < quantile(chlorides , .75)) %>%
   subset(chlorides > quantile(chlorides , .25)) %>%
-  ggplot(aes(chlorides)) + geom_histogram(binwidth = .001)
+  ggplot(aes(chlorides)) + geom_histogram(binwidth = .001) +
+  xlab("Chlorides (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -386,7 +409,8 @@ summary(rw_df$free.sulfur.dioxide)
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Univariate_Plots_fsdioxide1}
 #initial plot
-ggplot(aes(free.sulfur.dioxide), data=rw_df) + geom_histogram(binwidth = 1)
+ggplot(aes(free.sulfur.dioxide), data=rw_df) + geom_histogram(binwidth = 1) +
+  xlab("Free Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -403,7 +427,8 @@ fsdioxide_graph <- rw_df %>%
     geom_vline(xintercept = 
             quantile(fsdioxide_graph$free.sulfur.dioxide,0.25), color='red') +
     geom_vline(xintercept = 
-            quantile(fsdioxide_graph$free.sulfur.dioxide,0.75), color='red') 
+            quantile(fsdioxide_graph$free.sulfur.dioxide,0.75), color='red') +
+    xlab("Free Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -414,7 +439,8 @@ fsdioxide_graph <- rw_df %>%
 rw_df %>%
   subset(free.sulfur.dioxide < quantile(free.sulfur.dioxide , .75)) %>%
   subset(free.sulfur.dioxide > quantile(free.sulfur.dioxide , .25)) %>%
-  ggplot(aes(free.sulfur.dioxide)) + geom_histogram(binwidth = 1)
+  ggplot(aes(free.sulfur.dioxide)) + geom_histogram(binwidth = 1) +
+  xlab("Free Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -426,7 +452,8 @@ rw_df %>%
 summary(rw_df$total.sulfur.dioxide)
 
 #initial plot
-ggplot(aes(total.sulfur.dioxide), data=rw_df) + geom_histogram(binwidth = 1)
+ggplot(aes(total.sulfur.dioxide), data=rw_df) + geom_histogram(binwidth = 1) +
+  xlab("Total Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -443,7 +470,8 @@ fsdioxide_graph <- rw_df %>%
     geom_vline(xintercept = 
             quantile(fsdioxide_graph$total.sulfur.dioxide,0.25), color='red') +
     geom_vline(xintercept = 
-            quantile(fsdioxide_graph$total.sulfur.dioxide,0.75), color='red') 
+            quantile(fsdioxide_graph$total.sulfur.dioxide,0.75), color='red') +
+    xlab("Total Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -454,7 +482,8 @@ fsdioxide_graph <- rw_df %>%
 rw_df %>%
   subset(total.sulfur.dioxide < quantile(total.sulfur.dioxide , .75)) %>%
   subset(total.sulfur.dioxide > quantile(total.sulfur.dioxide , .25)) %>%
-  ggplot(aes(total.sulfur.dioxide)) + geom_histogram(binwidth = 1)
+  ggplot(aes(total.sulfur.dioxide)) + geom_histogram(binwidth = 1) +
+  xlab("Total Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -466,7 +495,8 @@ rw_df %>%
 summary(rw_df$density)
 
 #initial plot
-ggplot(aes(density), data=rw_df) + geom_histogram(binwidth = .0001)
+ggplot(aes(density), data=rw_df) + geom_histogram(binwidth = .0001) +
+  xlab("Density (g/cm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -483,7 +513,8 @@ density_graph <- rw_df %>%
     geom_vline(xintercept = 
             quantile(density_graph$density,0.25), color='red') +
     geom_vline(xintercept = 
-            quantile(density_graph$density,0.75), color='red') 
+            quantile(density_graph$density,0.75), color='red') +
+    xlab("Density (g/cm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -494,8 +525,9 @@ density_graph <- rw_df %>%
 rw_df %>%
   subset(density < quantile(density , .75)) %>%
   subset(density > quantile(density , .25)) %>%
-  ggplot(aes(density)) + geom_histogram(binwidth = .0001)+
-  scale_x_continuous(breaks = seq(.99,.999,by = .001))
+  ggplot(aes(density)) + geom_histogram(binwidth = .0001) +
+  scale_x_continuous(breaks = seq(.99,.999,by = .001)) +
+  xlab("Density (g/cm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -548,7 +580,8 @@ summary(rw_df_1$quality)
 
 #initial plot
 ggplot(aes(quality), data=rw_df_1) + geom_histogram(binwidth = .5) +
-  scale_x_continuous(breaks = seq(3,8))
+  scale_x_continuous(breaks = seq(3,8)) +
+  xlab("Quality")
 
 ```
 ```{r echo=FALSE}
@@ -621,7 +654,8 @@ rw_df %>%
   ggplot(aes(citric.acid)) + 
       geom_histogram(aes(y= ..density..), binwidth = .01,alpha =.5) + 
       geom_density(col=2) +
-      facet_wrap(~quality, scales = "free_y")
+      facet_wrap(~quality, scales = "free_y") +
+      xlab("Citric Acid (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -636,7 +670,8 @@ rw_df %>%
   ggplot(aes(alcohol)) +
       geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
       geom_density(col=2) +
-      facet_wrap(~quality, scales = "free_y")
+      facet_wrap(~quality, scales = "free_y") +
+      xlab("Alcohol (%)")
 ```
 ```{r echo=FALSE}
 
@@ -652,7 +687,8 @@ rw_df %>%
   ggplot(aes(fixed.acidity)) + 
       geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
       geom_density(col=2) +
-      facet_wrap(~quality, scales = "free_y")
+      facet_wrap(~quality, scales = "free_y") +
+      xlab("Fixed Acidity (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -668,7 +704,8 @@ rw_df %>%
   ggplot(aes(free.sulfur.dioxide)) + 
       geom_histogram(aes(y= ..density..), binwidth = 1,alpha =.5) + 
       geom_density(col=2) +
-      facet_wrap(~quality, scales = "free_y")
+      facet_wrap(~quality, scales = "free_y") +
+      xlab("Free Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -683,7 +720,8 @@ rw_df %>%
   ggplot(aes(density)) + 
       geom_histogram(aes(y= ..density..), binwidth = .0001,alpha =.5) + 
       geom_density(col=2) +
-      facet_wrap(~quality, scales = "free_y")
+      facet_wrap(~quality, scales = "free_y") +
+      xlab("Density (g/cm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -765,6 +803,7 @@ ggcorr(rw_df_woo[, 2:13], geom = "blank", label = TRUE, hjust = 0.6, size = 2
              aes(color = coefficient > 0, alpha = abs(coefficient) >= 0.2)) +
              scale_alpha_manual(values = c("TRUE" = 0.5, "FALSE" = 0))+
              guides(color = FALSE, alpha = FALSE)
+rw_df_woo$quality <- rw_df$quality
 #ggcorr(rw_df_woo[, 2:13],label = TRUE)
 #cor(rw_df_woo$fixed.acidity, rw_df_woo$citric.acid)
 #cor(rw_df_1$fixed.acidity, rw_df_1$quality)
@@ -798,8 +837,9 @@ ggcorr(rw_df_woo[, 2:13], geom = "blank", label = TRUE, hjust = 0.6, size = 2
 ####Low Corelation with outlier :
 ```{r echo=FALSE, warning=FALSE, info= FALSE}
 ggplot(aes(residual.sugar,quality), data=rw_df_1) + 
-  geom_point(position='jitter')+
-  geom_smooth(method = 'gam')
+  geom_point(position='jitter') +
+  geom_smooth(method = 'gam') +
+  xlab("Residual Sugar (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -812,8 +852,9 @@ ggplot(aes(residual.sugar,quality), data=rw_df_1) +
 ####Low Corelation without outlier:
 ```{r echo=FALSE, warning=FALSE, info= FALSE}
 ggplot(aes(residual.sugar,quality), data=rw_df_woo) + 
-  geom_point(position = 'jitter')+
-  geom_smooth(method = 'gam')
+  geom_point(position = 'jitter') +
+  geom_smooth(method = 'gam') +
+  xlab("Residual Sugar (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -828,7 +869,8 @@ rw_df %>%
   subset(residual.sugar < quantile(residual.sugar , .94)) %>%
   subset(residual.sugar > quantile(residual.sugar , .01)) %>%
   ggplot(aes(quality,residual.sugar))+
-  geom_boxplot()
+  geom_boxplot() +
+  ylab("Residual Sugar (g/dm^3)")
 
   #facet_wrap(~quality, scales = "free_y")
   #ggplot(aes(residual.sugar)) + 
@@ -844,7 +886,9 @@ rw_df %>%
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Bivariate_Plots_tdioxide}
 ggplot(aes(free.sulfur.dioxide, total.sulfur.dioxide), data=rw_df) + 
   geom_smooth(method = 'gam') +
-  geom_point()
+  geom_point() +
+  xlab("Free Sulfur Dioxide (mg/dm^3)") +
+  ylab("Total Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE}
 
@@ -855,7 +899,9 @@ ggplot(aes(free.sulfur.dioxide, total.sulfur.dioxide), data=rw_df) +
 ```{r echo=FALSE, warning=FALSE, info= FALSE, Bivariate_Plots_dioxide}
 ggplot(aes(free.sulfur.dioxide, total.sulfur.dioxide), data=rw_df_woo) + 
   geom_smooth(method = 'gam') +
-  geom_point(position='jitter')
+  geom_point(position='jitter') +
+  xlab("Free Sulfur Dioxide (mg/dm^3)") +
+  ylab("Total Sulfur Dioxide (mg/dm^3)")
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE}
 
@@ -883,8 +929,11 @@ the dataset?
 
 #### alcohol vs sulphate with outlier
 ```{r echo=FALSE, Multivariate_Plots_alcohol_sulphates_o}
-ggplot(aes(alcohol, sulphates, color=quality), data=rw_df_1) + 
-  geom_smooth(method = 'gam' ) + geom_point()+ facet_wrap(~quality, scales = "free_y")
+ggplot(aes(alcohol, sulphates, color=quality), data=rw_df) + 
+  geom_smooth(method = 'gam' ) + geom_point()+ 
+  facet_wrap(~quality, scales = "free_y") +
+  xlab("Alcohol (%)") +
+  ylab("Sulphates (g/dm3)")
 ```
 ```{r echo=FALSE}
 
@@ -892,7 +941,10 @@ ggplot(aes(alcohol, sulphates, color=quality), data=rw_df_1) +
 #### alcohol vs sulphaes without outlier
 ```{r echo=FALSE, Multivariate_Plots_alcohol_sulphates_woo}
 ggplot(aes(alcohol, sulphates, color=quality), data=rw_df_woo) + 
-  geom_smooth(method = 'gam' ) + geom_point()+ facet_wrap(~quality, scales = "free_y")
+  geom_smooth(method = 'gam' ) + geom_point()+
+  facet_wrap(~quality, scales = "free_y") +
+  xlab("Alcohol (%)") +
+  ylab("Sulphates (g/dm3)")
 ```
 ```{r echo=FALSE}
 
@@ -901,9 +953,11 @@ ggplot(aes(alcohol, sulphates, color=quality), data=rw_df_woo) +
 
 #### fixed.acidity vs citric.acid with outlier
 ```{r echo=FALSE, Multivariate_Plots_fixed_citric_o}
-ggplot(aes(fixed.acidity, citric.acid, color=quality), data=rw_df_1) + 
+ggplot(aes(fixed.acidity, citric.acid, color=quality), data=rw_df) + 
   geom_smooth(method = 'gam' ) + geom_point()+ 
-  facet_wrap(~quality, scales = "free_y")
+  facet_wrap(~quality, scales = "free_y") +
+  xlab("Fixed Acidity (g/dm^3)") +
+  ylab("Citric Acid (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -911,10 +965,12 @@ ggplot(aes(fixed.acidity, citric.acid, color=quality), data=rw_df_1) +
 #### Note that citric acid and fixed acidity has positive correlation between them. Moreover, both of them have positive correlation with quality. Hence we see that those two adds up to the quality in all cases.
 
 #### fixed.acidity vs citric.acid without outlier
-```{r echo=FALSE, Multivariate_Plots_alcohol_facidity_woo}
+```{r echo=FALSE, Multivariate_Plots_facidity_woo}
 ggplot(aes(fixed.acidity, citric.acid, color=quality), data=rw_df_woo) + 
   geom_smooth(method = 'gam' ) + geom_point()+ 
-  facet_wrap(~quality, scales = "free_y")
+  facet_wrap(~quality, scales = "free_y") +
+  xlab("Fixed Acidity (g/dm^3)") +
+  ylab("Citric Acid (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -938,7 +994,9 @@ rw_mean_summary_norm$quality <- rw_mean_summary$quality
 rw_melts <- melt(rw_mean_summary_norm, id='quality')
 #print(rw_melts)
 ggplot(aes(quality,value, color = variable), data = rw_melts) + 
-  geom_point() + geom_line()
+  geom_point() + geom_line() +
+  ylab ("Normalized Mean Value") + 
+  xlab ("Quality")
   
 ```
 ```{r echo=FALSE, warning=FALSE, info= FALSE}
@@ -969,7 +1027,8 @@ strengths and limitations of your model.
 ```{r echo=FALSE, Plot_One}
 ggplot(aes(residual.sugar), data=rw_df) + 
   geom_histogram(binwidth = .1) +
-  ggtitle("Variable with farthest Outlier")
+  ggtitle("Variable with farthest Outlier") +
+  xlab("Residual Sugar (g/dm^3)")
 ```
 ```{r echo=FALSE}
 
@@ -987,7 +1046,8 @@ rw_df %>%
       geom_histogram(aes(y= ..density..), binwidth = .1,alpha =.5) + 
       geom_density(col=2) +
       facet_wrap(~quality, scales = "free_y") +
-      ggtitle("Variable with clear density variations across Quality")
+      ggtitle("Variable with clear density variations across Quality") +
+      xlab("Alcohol (%)")
 ```
 ```{r echo=FALSE}
 
@@ -1003,7 +1063,10 @@ rw_df %>%
 ```{r echo=FALSE, Plot_Three}
 ggplot(aes(quality,value, color = variable), data = rw_melts) + 
   geom_point() + geom_line() +
-  ggtitle("Mean comparison of variables on Quality")
+  ggtitle("Mean comparison of variables on Quality") +
+  ylab ("Normalized Mean Value") + 
+  xlab ("Quality")
+
 ```
 ```{r echo=FALSE, }
 
