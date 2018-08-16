@@ -50,3 +50,4 @@
 #*.RTF  diff=astextplain
 *.html linguist-vendored
 *.rmd linguist-language=R
+*.twbx linguist-language=Tableau
