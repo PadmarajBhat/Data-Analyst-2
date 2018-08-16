@@ -49,3 +49,4 @@
 #*.rtf  diff=astextplain
 #*.RTF  diff=astextplain
 *.html linguist-vendored
+*.rmd linguist-language=R
