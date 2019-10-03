@@ -21,3 +21,6 @@
     
     ```
     This displays a simple bar chart (tried it on colab)
+
+* Tableau Wrangling Tips:
+https://www.datasciencecentral.com/video/video/show?id=6448529%3AVideo%3A892105
